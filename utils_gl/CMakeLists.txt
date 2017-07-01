@@ -2,7 +2,10 @@ INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src ${GNULIBS_INCLUDE_DIR})
 LINK_LIBRARIES(${PROJECT_NAME} ${REQUIRED_LIBRARIES} )
 
 IF(GL_FOUND)
-    ADD_EXECUTABLE(aruco_test_gl aruco_test_gl.cpp)
+    ADD_EXECUTABLE(aruco_test_gl 
+        aruco_test_gl.cpp
+        renderer.cpp renderer.h
+        )
     TARGET_LINK_LIBRARIES(aruco_test_gl ${OPENGL_LIBS})
 
     ADD_EXECUTABLE(aruco_test_markermap_gl aruco_test_markermap_gl.cpp)
