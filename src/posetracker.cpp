@@ -158,11 +158,11 @@ void MarkerMapPoseTracker::setParams(const  CameraParameters &cam_params,const M
         _map_mm.insert(make_pair(m.id,m));
 }
 
-bool MarkerMapPoseTracker::estimatePose(const  vector<Marker> &v_m){
+bool MarkerMapPoseTracker::estimatePose(const  std::vector<Marker> &v_m){
 
 
-    vector<cv::Point2f> p2d;
-    vector<cv::Point3f> p3d;
+    std::vector<cv::Point2f> p2d;
+    std::vector<cv::Point3f> p3d;
     for(auto marker:v_m){
         if ( _map_mm.find(marker.id)!=_map_mm.end()){//is the marker part of the map?
             for(auto p:marker)  p2d.push_back(p);

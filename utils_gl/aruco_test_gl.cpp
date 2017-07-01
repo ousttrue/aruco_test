@@ -43,17 +43,16 @@ or implied, of Rafael Muñoz Salinas.
 #include "aruco.h"
 
 
-string TheInputVideo;
+std::string TheInputVideo;
 bool The3DInfoAvailable=false;
 float TheMarkerSize=0.05f;
 aruco::MarkerDetector PPDetector;
 cv::VideoCapture TheVideoCapturer;
-vector<aruco::Marker> TheMarkers;
+std::vector<aruco::Marker> TheMarkers;
 cv::Mat TheInputImage,TheUndInputImage,TheResizedImage;
 aruco::CameraParameters TheCameraParams;
 cv::Size TheGlWindowSize;
 bool TheCaptureFlag=true;
-
 
 void vDrawScene();
 void vIdle();
@@ -68,7 +67,7 @@ int main(int argc,char **argv)
         TheVideoCapturer.open(0);
         if (!TheVideoCapturer.isOpened())
         {
-            cerr<<"Could not open video"<<endl;
+            std::cerr<<"Could not open video"<<std::endl;
             return -1;
 
         }
@@ -96,7 +95,7 @@ int main(int argc,char **argv)
     } catch (std::exception &ex)
 
     {
-        cout<<"Exception :"<<ex.what()<<endl;
+        std::cout<<"Exception :"<<ex.what()<<std::endl;
     }
 
 }

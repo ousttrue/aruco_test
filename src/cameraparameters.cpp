@@ -30,7 +30,6 @@ or implied, of Rafael Muñoz Salinas.
 #include <iostream>
 #include <opencv2/core/core.hpp>
 #include <opencv2/calib3d/calib3d.hpp>
-using namespace std;
 namespace aruco {
 
 CameraParameters::CameraParameters() {
@@ -109,24 +108,24 @@ cv::Point3f CameraParameters::getCameraLocation(cv::Mat Rvec, cv::Mat Tvec) {
 
 /**Saves this to a file
   */
-void CameraParameters::saveToFile(string path, bool inXML) throw(cv::Exception) {
+void CameraParameters::saveToFile(std::string path, bool inXML) throw(cv::Exception) {
     if (!isValid())
         throw cv::Exception(9006, "invalid object", "CameraParameters::saveToFile", __FILE__, __LINE__);
     if (!inXML) {
-        ofstream file(path.c_str());
+        std::ofstream file(path.c_str());
         if (!file)
             throw cv::Exception(9006, "could not open file:" + path, "CameraParameters::saveToFile", __FILE__, __LINE__);
-        file << "# Aruco 1.0 CameraParameters" << endl;
-        file << "fx = " << CameraMatrix.at< float >(0, 0) << endl;
-        file << "cx = " << CameraMatrix.at< float >(0, 2) << endl;
-        file << "fy = " << CameraMatrix.at< float >(1, 1) << endl;
-        file << "cy = " << CameraMatrix.at< float >(1, 2) << endl;
-        file << "k1 = " << Distorsion.at< float >(0, 0) << endl;
-        file << "k2 = " << Distorsion.at< float >(1, 0) << endl;
-        file << "p1 = " << Distorsion.at< float >(2, 0) << endl;
-        file << "p2 = " << Distorsion.at< float >(3, 0) << endl;
-        file << "width = " << CamSize.width << endl;
-        file << "height = " << CamSize.height << endl;
+        file << "# Aruco 1.0 CameraParameters" << std::endl;
+        file << "fx = " << CameraMatrix.at< float >(0, 0) << std::endl;
+        file << "cx = " << CameraMatrix.at< float >(0, 2) << std::endl;
+        file << "fy = " << CameraMatrix.at< float >(1, 1) << std::endl;
+        file << "cy = " << CameraMatrix.at< float >(1, 2) << std::endl;
+        file << "k1 = " << Distorsion.at< float >(0, 0) << std::endl;
+        file << "k2 = " << Distorsion.at< float >(1, 0) << std::endl;
+        file << "p1 = " << Distorsion.at< float >(2, 0) << std::endl;
+        file << "p2 = " << Distorsion.at< float >(3, 0) << std::endl;
+        file << "width = " << CamSize.width << std::endl;
+        file << "height = " << CamSize.height << std::endl;
     } else {
         cv::FileStorage fs(path, cv::FileStorage::WRITE);
         fs << "image_width" << CamSize.width;
@@ -160,7 +159,7 @@ void CameraParameters::resize(cv::Size size) throw(cv::Exception) {
  *
  *
  */
-void CameraParameters::readFromXMLFile(string filePath) throw(cv::Exception) 
+void CameraParameters::readFromXMLFile(std::string filePath) throw(cv::Exception) 
 {
     cv::FileStorage fs(filePath, cv::FileStorage::READ);
     int w = -1, h = -1;
@@ -204,7 +203,7 @@ void CameraParameters::glGetProjectionMatrix(cv::Size orgImgSize, cv::Size size,
                                              bool invert) throw(cv::Exception) {
 
     if (cv::countNonZero(Distorsion) != 0)
-        std::cerr << "CameraParameters::glGetProjectionMatrix :: The camera has distortion coefficients " << __FILE__ << " " << __LINE__ << endl;
+        std::cerr << "CameraParameters::glGetProjectionMatrix :: The camera has distortion coefficients " << __FILE__ << " " << __LINE__ << std::endl;
     if (isValid() == false)
         throw cv::Exception(9100, "invalid camera parameters", "CameraParameters::glGetProjectionMatrix", __FILE__, __LINE__);
 

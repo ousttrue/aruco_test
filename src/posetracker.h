@@ -94,7 +94,7 @@ public:
     bool isValid()const{return _isValid;}
     //estimates camera pose wrt the markermap
     //returns true if pose has been obtained and false otherwise
-    bool estimatePose(const  vector<Marker> &v_m);
+    bool estimatePose(const  std::vector<Marker> &v_m);
 
     //returns the 4x4 transform matrix. Returns an empty matrix if last call to estimatePose returned false
     cv::Mat getRTMatrix()const;

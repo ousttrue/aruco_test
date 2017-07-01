@@ -54,7 +54,7 @@ void  __glGetModelViewMatrix(double modelview_matrix[16],const cv::Mat &Rvec,con
 bool The3DInfoAvailable=false;
 float TheMarkerSize=-1;
 VideoCapture TheVideoCapturer;
-vector<Marker> TheMarkers;
+std::vector<Marker> TheMarkers;
 //board
 cv::Mat TheInputImage,TheUndInputImage,TheResizedImage;
 CameraParameters TheCameraParams;
@@ -81,10 +81,10 @@ int main(int argc,char **argv)
     try
     {
         if (argc!=5) {
-            cerr<<"Invalid number of arguments"<<endl;
-            cerr<<"Usage: (in.avi|live) markermap_config.yml  intrinsics.yml   size "<<endl;
-            cerr<<"WARNING: this test creates a synthetic mask consisting of a single rectangle. "<<endl;
-            cerr<<"WARNING: The only purpose is to show how to create an AR application with mask in OpenGL "<<endl;
+            std::cerr<<"Invalid number of arguments"<< std::endl;
+            std::cerr<<"Usage: (in.avi|live) markermap_config.yml  intrinsics.yml   size "<< std::endl;
+            std::cerr<<"WARNING: this test creates a synthetic mask consisting of a single rectangle. "<< std::endl;
+            std::cerr<<"WARNING: The only purpose is to show how to create an AR application with mask in OpenGL "<< std::endl;
             return false;
         }
         TheCameraParams.readFromXMLFile(argv[3]);
@@ -96,7 +96,7 @@ int main(int argc,char **argv)
 
         MMPoseTracker.setParams(TheCameraParams,TheMMConfig);
         //Open video input source
-        if (string(argv[1])=="live")  //read from camera
+        if (std::string(argv[1])=="live")  //read from camera
             TheVideoCapturer.open(0);
         else TheVideoCapturer.open(argv[1]);
 
@@ -139,7 +139,7 @@ int main(int argc,char **argv)
     } catch (std::exception &ex)
 
     {
-        cout<<"Exception :"<<ex.what()<<endl;
+        std::cout<<"Exception :"<<ex.what()<< std::endl;
     }
 
 }

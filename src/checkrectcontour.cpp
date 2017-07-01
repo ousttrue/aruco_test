@@ -1,6 +1,5 @@
 #include <iostream>
 #include "checkrectcontour.h"
-using namespace std;
 namespace aruco{
 
 struct Line
@@ -27,7 +26,7 @@ private:
 };
 
 //Calcula el Emax en el segmento entre inicial y final
-void CheckRectContour::calculate_emax_between_points(const vector<cv::Point> &contorno, unsigned int inicial, unsigned int final,
+void CheckRectContour::calculate_emax_between_points(const std::vector<cv::Point> &contorno, unsigned int inicial, unsigned int final,
                                 float &errorMaximo, unsigned int &posicion)
 {
     assert (inicial != final);
@@ -54,8 +53,8 @@ void CheckRectContour::calculate_emax_between_points(const vector<cv::Point> &co
 }
 
 
-bool CheckRectContour::check_rect_contour(const vector<cv::Point> & contorno, const float &umbral,
-                                   vector<cv::Point> &aproximacion)
+bool CheckRectContour::check_rect_contour(const std::vector<cv::Point> & contorno, const float &umbral,
+                                   std::vector<cv::Point> &aproximacion)
 {
     //primero seleccionamos dos puntos aleatorios que van a ser el inicial y el central
     unsigned int inicial=0, central= contorno.size() / 2;
@@ -142,7 +141,7 @@ bool CheckRectContour::check_rect_contour(const vector<cv::Point> & contorno, co
 }
 
 
-vector<cv::Point> CheckRectContour::getConvexRect(vector<cv::Point> &points,float thres){
+std::vector<cv::Point> CheckRectContour::getConvexRect(std::vector<cv::Point> &points,float thres){
 
     std::vector<cv::Point> pres;
 

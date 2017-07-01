@@ -48,7 +48,7 @@ void CvDrawingUtils::draw3dAxis(cv::Mat &Image, const CameraParameters &CP, cons
     objectPoints.at< float >(3, 1) = 0;
     objectPoints.at< float >(3, 2) = axis_size;
 
-    vector< Point2f > imagePoints;
+    std::vector< Point2f > imagePoints;
     cv::projectPoints(objectPoints, Rvec,  Tvec, CP.CameraMatrix, CP.Distorsion, imagePoints);
     // draw lines of different colours
     cv::line(Image, imagePoints[0], imagePoints[1], Scalar(0, 0, 255, 255), 1, CV_AA);
@@ -81,7 +81,7 @@ void CvDrawingUtils::draw3dAxis(cv::Mat &Image, Marker &m, const CameraParameter
     objectPoints.at< float >(3, 1) = 0;
     objectPoints.at< float >(3, 2) = size;
 
-    vector< Point2f > imagePoints;
+    std::vector< Point2f > imagePoints;
     cv::projectPoints(objectPoints, m.Rvec, m.Tvec, CP.CameraMatrix, CP.Distorsion, imagePoints);
     // draw lines of different colours
     cv::line(Image, imagePoints[0], imagePoints[1], Scalar(0, 0, 255, 255), 1, CV_AA);
@@ -156,7 +156,7 @@ void CvDrawingUtils::draw3dCube(cv::Mat &Image, Marker &m, const CameraParameter
         objectPoints.at< float >(7, 2) = m.ssize;
     }
 
-    vector< Point2f > imagePoints;
+    std::vector< Point2f > imagePoints;
     projectPoints(objectPoints, m.Rvec, m.Tvec, CP.CameraMatrix, CP.Distorsion, imagePoints);
     // draw lines of different colours
     for (int i = 0; i < 4; i++)

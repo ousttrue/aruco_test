@@ -32,12 +32,11 @@ or implied, of Rafael Muñoz Salinas.
 #include <vector>
 #include "exports.h"
 #include "marker.h"
-using namespace std;
 namespace aruco {
 /**
  * 3d representation of a marker
  */
-struct ARUCO_EXPORTS Marker3DInfo : public vector< cv::Point3f > {
+struct ARUCO_EXPORTS Marker3DInfo : public std::vector< cv::Point3f > {
     Marker3DInfo() {}
     Marker3DInfo(int _id) { id = _id; }
     bool operator==(const Marker3DInfo &MI) {return id==MI.id;}
@@ -68,7 +67,7 @@ public:
 */
 
 
-class ARUCO_EXPORTS MarkerMap : public vector< Marker3DInfo > {
+class ARUCO_EXPORTS MarkerMap : public std::vector< Marker3DInfo > {
 
 
 public:
@@ -80,7 +79,7 @@ public:
     /**Loads from file
      * @param filePath to the config file
      */
-    MarkerMap(string filePath) throw(cv::Exception);
+    MarkerMap(std::string filePath) throw(cv::Exception);
 
     /**Indicates if the corners are expressed in meters
      */
@@ -117,16 +116,16 @@ public:
 
     /**Saves the board info to a file
     */
-    void saveToFile(string sfile) throw(cv::Exception);
+    void saveToFile(std::string sfile) throw(cv::Exception);
     /**Reads board info from a file
     */
-    void readFromFile(string sfile) throw(cv::Exception);
+    void readFromFile(std::string sfile) throw(cv::Exception);
 
 
 
     //calculates the camera location w.r.t. the map using the information provided
     //returns the <rvec,tvec>
-    pair<cv::Mat,cv::Mat> calculateExtrinsics(const std::vector<aruco::Marker> &markers ,float markerSize, cv::Mat CameraMatrix, cv::Mat Distorsion   ) throw(cv::Exception);
+    std::pair<cv::Mat,cv::Mat> calculateExtrinsics(const std::vector<aruco::Marker> &markers ,float markerSize, cv::Mat CameraMatrix, cv::Mat Distorsion   ) throw(cv::Exception);
 
     //returns string indicating the dictionary
     std::string getDictionary()const{return dictionary;}

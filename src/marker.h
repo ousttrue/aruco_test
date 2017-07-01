@@ -33,7 +33,6 @@ or implied, of Rafael Muñoz Salinas.
 #include <cstdint>
 #include <opencv2/core/core.hpp>
 #include "cameraparameters.h"
-using namespace std;
 namespace aruco {
 /**\brief This class represents a marker. It is a vector of the fours corners ot the marker
  *
@@ -119,7 +118,7 @@ class ARUCO_EXPORTS Marker : public std::vector< cv::Point2f > {
     friend bool operator<(const Marker &M1, const Marker &M2) { return M1.id < M2.id; }
     /**
      */
-    friend ostream &operator<<(ostream &str, const Marker &M) {
+    friend std::ostream &operator<<(std::ostream &str, const Marker &M) {
         str << M.id << "=";
         for (int i = 0; i < 4; i++)
             str << "(" << M[i].x << "," << M[i].y << ") ";
@@ -135,9 +134,9 @@ class ARUCO_EXPORTS Marker : public std::vector< cv::Point2f > {
 
 
     //saves to a binary stream
-    void toStream(ostream &str)const;
+    void toStream(std::ostream &str)const;
     //reads from a binary stream
-    void fromStream(istream &str);
+    void fromStream(std::istream &str);
 
     //returns the 3d points of a marker wrt its center
     static vector<cv::Point3f> get3DPoints(float msize);

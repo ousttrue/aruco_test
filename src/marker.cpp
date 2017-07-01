@@ -260,7 +260,7 @@ void Marker::calculateExtrinsics(float markerSize, const CameraParameters &CP, b
     calculateExtrinsics(markerSize, CP.CameraMatrix, CP.Distorsion, setYPerpendicular);
 }
 
-void print(cv::Point3f p, string cad) { cout << cad << " " << p.x << " " << p.y << " " << p.z << endl; }
+void print(cv::Point3f p, std::string cad) { std::cout << cad << " " << p.x << " " << p.y << " " << p.z << std::endl; }
 /**
  */
 void Marker::calculateExtrinsics(float markerSizeMeters, cv::Mat camMatrix, cv::Mat distCoeff, bool setYPerpendicular) throw(cv::Exception) {
@@ -285,7 +285,7 @@ void Marker::calculateExtrinsics(float markerSizeMeters, cv::Mat camMatrix, cv::
     ssize = markerSizeMeters;
     // cout<<(*this)<<endl;
 }
-vector<cv::Point3f> Marker::get3DPoints(float msize)
+std::vector<cv::Point3f> Marker::get3DPoints(float msize)
 {
     double halfSize = msize / 2.;
     return {cv::Point3f(-halfSize,halfSize,0), cv::Point3f(halfSize,halfSize,0),cv::Point3f(halfSize,-halfSize,0),cv::Point3f(-halfSize,-halfSize,0)};
@@ -349,7 +349,7 @@ float Marker::getPerimeter() const {
     return sum;
 }
 //saves to a binary stream
-void Marker::toStream(ostream &str)const{
+void Marker::toStream(std::ostream &str)const{
     assert(Rvec.type()==CV_32F && Tvec.type()==CV_32F);
     str.write((char*)&id,sizeof(int));
     str.write((char*)&ssize,sizeof(float));
@@ -362,7 +362,7 @@ void Marker::toStream(ostream &str)const{
 
 }
 //reads from a binary stream
-void Marker::fromStream(istream &str){
+void Marker::fromStream(std::istream &str){
     Rvec.create(1,3,CV_32F);
     Tvec.create(1,3,CV_32F);
     str.read((char*)&id,sizeof(int));

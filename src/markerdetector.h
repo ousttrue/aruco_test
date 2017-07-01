@@ -34,7 +34,7 @@ or implied, of Rafael Muñoz Salinas.
 #include "dictionary.h"
 #include "marker.h"
 #include "markerlabeler.h"
-using namespace std;
+
 
 namespace aruco {
 class CameraParameters;
@@ -334,11 +334,11 @@ public:
     * Detection of candidates to be markers, i.e., rectangles.
     * This function returns in candidates all the rectangles found in a thresolded image
     */
-    void detectRectangles(const cv::Mat &thresImg, vector< std::vector< cv::Point2f > > &candidates);
+    void detectRectangles(const cv::Mat &thresImg, std::vector< std::vector< cv::Point2f > > &candidates);
 
     /**Returns a list candidates to be markers (rectangles), for which no valid id was found after calling detectRectangles
      */
-    const vector< std::vector< cv::Point2f > > &getCandidates() { return _candidates; }
+    const std::vector< std::vector< cv::Point2f > > &getCandidates() { return _candidates; }
 
     /**
      * Given the iput image with markers, creates an output image with it in the canonical position
@@ -366,11 +366,11 @@ public:
     * Detection of candidates to be markers, i.e., rectangles.
     * This function returns in candidates all the rectangles found in a thresolded image
     */
-    void detectRectangles(vector< cv::Mat > &vimages, vector< MarkerCandidate > &candidates);
+    void detectRectangles(std::vector< cv::Mat > &vimages, std::vector< MarkerCandidate > &candidates);
     //operating params
     Params _params;
     // vectr of candidates to be markers. This is a vector with a set of rectangles that have no valid id
-    vector< std::vector< cv::Point2f > > _candidates;
+    std::vector< std::vector< cv::Point2f > > _candidates;
     // Images
     cv::Mat grey, thres;
     // pointer to the function that analizes a rectangular region so as to detect its internal marker
@@ -384,9 +384,9 @@ public:
     int perimeter(std::vector< cv::Point2f > &a);
 
      // auxiliar functions to perform LINES refinement
-    void interpolate2Dline(const vector< cv::Point2f > &inPoints, cv::Point3f &outLine);
+    void interpolate2Dline(const std::vector< cv::Point2f > &inPoints, cv::Point3f &outLine);
     cv::Point2f getCrossPoint(const cv::Point3f &line1, const cv::Point3f &line2);
-    void distortPoints(vector< cv::Point2f > in, vector< cv::Point2f > &out, const cv::Mat &camMatrix, const cv::Mat &distCoeff);
+    void distortPoints(std::vector< cv::Point2f > in, std::vector< cv::Point2f > &out, const cv::Mat &camMatrix, const cv::Mat &distCoeff);
 
 
     /**Given a vector vinout with elements and a boolean vector indicating the lements from it to remove,
@@ -394,7 +394,7 @@ public:
      * @param vinout
      * @param toRemove
      */
-    template < typename T > void removeElements(vector< T > &vinout, const vector< bool > &toRemove) {
+    template < typename T > void removeElements(std::vector< T > &vinout, const std::vector< bool > &toRemove) {
         // remove the invalid ones by setting the valid in the positions left by the invalids
         size_t indexValid = 0;
         for (size_t i = 0; i < toRemove.size(); i++) {
@@ -414,11 +414,11 @@ public:
     void draw(cv::Mat out, const std::vector< Marker > &markers);
     // method to refine corner detection in case the internal border after threshold is found
     // This was tested in the context of chessboard methods
-    void findCornerMaxima(vector< cv::Point2f > &Corners, const cv::Mat &grey, int wsize);
+    void findCornerMaxima(std::vector< cv::Point2f > &Corners, const cv::Mat &grey, int wsize);
 
 
 
-    template < typename T > void joinVectors(vector< vector< T > > &vv, vector< T > &v, bool clearv = false) {
+    template < typename T > void joinVectors(std::vector< std::vector< T > > &vv, std::vector< T > &v, bool clearv = false) {
         if (clearv)
             v.clear();
         for (size_t i = 0; i < vv.size(); i++)
@@ -426,7 +426,7 @@ public:
                 v.push_back(vv[i][j]);
     }
 
-    vector<cv::Mat > imagePyramid;
+    std::vector<cv::Mat > imagePyramid;
 };
 };
 #endif
