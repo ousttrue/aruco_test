@@ -20,32 +20,15 @@ class Renderer
     bool m_initialized = false;
 
 public:
-
-    void ToggleCaptureFlag()
-    {
-        TheCaptureFlag = !TheCaptureFlag;
-    }
-
-    int InputWidth()const 
-    {
-        return TheInputImage.size().width;
-    }
-
-    int InputHeight()const
-    {
-        return TheInputImage.size().height;
-    }
-
+    void ToggleCaptureFlag() { TheCaptureFlag = !TheCaptureFlag; }
+    int InputWidth()const { return TheInputImage.size().width; }
+    int InputHeight()const { return TheInputImage.size().height; }
     bool Initialize(int videoId);
-
     void Draw();
-
     void Update();
-
     void Resize(int w, int h);
 
 private:
-    void axis(float size);
-
+    void DrawCaptureImage();
+    void DrawAxis(float size);
 };
-

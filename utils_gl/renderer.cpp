@@ -35,45 +35,34 @@ void Renderer::Draw()
 
     ///clear
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    ///draw image in the buffer
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0, TheGlWindowSize.width, 0, TheGlWindowSize.height, -1.0, 1.0);
-    glViewport(0, 0, TheGlWindowSize.width, TheGlWindowSize.height);
-    glDisable(GL_TEXTURE_2D);
-    glPixelZoom(1, -1);
-    glRasterPos3f(0, TheGlWindowSize.height - 0.5, -1.0);
-    glDrawPixels(TheGlWindowSize.width, TheGlWindowSize.height, GL_RGB, GL_UNSIGNED_BYTE, TheResizedImage.ptr(0));
+
+    DrawCaptureImage();
+
     ///Set the appropriate projection matrix so that rendering is done in a enrvironment
     //like the real camera (without distorsion)
     glMatrixMode(GL_PROJECTION);
     double proj_matrix[16];
     TheCameraParams.glGetProjectionMatrix(TheInputImage.size(), TheGlWindowSize, proj_matrix, 0.05, 10);
-    glLoadIdentity();
+    //glLoadIdentity();
     glLoadMatrixd(proj_matrix);
 
     //now, for each marker,
-    double modelview_matrix[16];
     for (unsigned int m = 0; m < TheMarkers.size(); m++)
     {
+        double modelview_matrix[16];
         TheMarkers[m].glGetModelViewMatrix(modelview_matrix);
         glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
+        //glLoadIdentity();
         glLoadMatrixd(modelview_matrix);
 
-
-        axis(TheMarkerSize);
+        DrawAxis(TheMarkerSize);
 
         glColor3f(1, 0.4, 0.4);
         glTranslatef(0, 0, TheMarkerSize / 2);
         glPushMatrix();
         glutWireCube(TheMarkerSize);
-
         glPopMatrix();
     }
-
 }
 
 void Renderer::Update()
@@ -102,7 +91,22 @@ void Renderer::Resize(int w, int h)
         cv::resize(TheUndInputImage, TheResizedImage, TheGlWindowSize);
 }
 
-void Renderer::axis(float size)
+void Renderer::DrawCaptureImage()
+{
+    ///draw image in the buffer
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, TheGlWindowSize.width, 0, TheGlWindowSize.height, -1.0, 1.0);
+    glViewport(0, 0, TheGlWindowSize.width, TheGlWindowSize.height);
+    glDisable(GL_TEXTURE_2D);
+    glPixelZoom(1, -1);
+    glRasterPos3f(0, TheGlWindowSize.height - 0.5, -1.0);
+    glDrawPixels(TheGlWindowSize.width, TheGlWindowSize.height, GL_RGB, GL_UNSIGNED_BYTE, TheResizedImage.ptr(0));
+}
+
+void Renderer::DrawAxis(float size)
 {
     glColor3f(1, 0, 0);
     glBegin(GL_LINES);
@@ -116,11 +120,9 @@ void Renderer::axis(float size)
     glVertex3f(0.0f, size, 0.0f); // ending point of the line
     glEnd();
 
-
     glColor3f(0, 0, 1);
     glBegin(GL_LINES);
     glVertex3f(0.0f, 0.0f, 0.0f); // origin of the line
     glVertex3f(0.0f, 0.0f, size); // ending point of the line
     glEnd();
 }
-
