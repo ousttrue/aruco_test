@@ -45,9 +45,8 @@ using namespace cv;
 using namespace aruco;
 
 string TheInputVideo;
-string TheIntrinsicFile;
 bool The3DInfoAvailable=false;
-float TheMarkerSize=-1;
+float TheMarkerSize=0.05f;
 MarkerDetector PPDetector;
 VideoCapture TheVideoCapturer;
 vector<Marker> TheMarkers;
@@ -55,7 +54,7 @@ Mat TheInputImage,TheUndInputImage,TheResizedImage;
 CameraParameters TheCameraParams;
 Size TheGlWindowSize;
 bool TheCaptureFlag=true;
-bool readIntrinsicFile(string TheIntrinsicFile,Mat & TheIntriscCameraMatrix,Mat &TheDistorsionCameraParams,Size size);
+//bool readIntrinsicFile(string TheIntrinsicFile,Mat & TheIntriscCameraMatrix,Mat &TheDistorsionCameraParams,Size size);
 
 void vDrawScene();
 void vIdle();
@@ -63,42 +62,11 @@ void vResize( GLsizei iWidth, GLsizei iHeight );
 void vMouse(int b,int s,int x,int y);
 
 
-/************************************
- *
- *
- *
- *
- ************************************/
-
-bool readArguments ( int argc,char **argv )
-{
-    if (argc!=4) {
-        cerr<<"Invalid number of arguments"<<endl;
-        cerr<<"Usage: (in.avi|live)  intrinsics.yml   size "<<endl;
-        return false;
-    }
-    TheInputVideo=argv[1];
-    TheIntrinsicFile=argv[2];
-    TheMarkerSize=atof(argv[3]);
-    return true;
-}
-
-
-/************************************
- *
- *
- *
- *
- ************************************/
-
 int main(int argc,char **argv)
 {
     try
     {//parse arguments
-        if (readArguments (argc,argv)==false) return 0;
-        //read from camera
-        if (TheInputVideo=="live") TheVideoCapturer.open(0);
-        else TheVideoCapturer.open(TheInputVideo);
+        TheVideoCapturer.open(0);
         if (!TheVideoCapturer.isOpened())
         {
             cerr<<"Could not open video"<<endl;
@@ -109,7 +77,6 @@ int main(int argc,char **argv)
         //read first image
         TheVideoCapturer>>TheInputImage;
         //read camera paramters if passed
-        TheCameraParams.readFromXMLFile(TheIntrinsicFile);
         TheCameraParams.resize(TheInputImage.size());
 
         glutInit(&argc, argv);

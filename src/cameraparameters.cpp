@@ -33,11 +33,16 @@ or implied, of Rafael Muñoz Salinas.
 using namespace std;
 namespace aruco {
 
-
 CameraParameters::CameraParameters() {
-    CameraMatrix = cv::Mat();
-    Distorsion = cv::Mat();
-    CamSize = cv::Size(-1, -1);
+    CameraMatrix = cv::Mat::zeros(3, 3, CV_32FC1);
+    CameraMatrix.at<float>(0, 0) = 628.15802f;
+    CameraMatrix.at<float>(1, 1) = 628.15802f;
+    CameraMatrix.at<float>(0, 2) = 324.099f;
+    CameraMatrix.at<float>(1, 2) = 260.90799f;
+    CameraMatrix.at<float>(2, 2) = 1.0f;
+
+    Distorsion = cv::Mat::zeros(1, 5, CV_32FC1);
+    CamSize = cv::Size(640, 480);
 }
 /**Creates the object from the info passed
  * @param cameraMatrix 3x3 matrix (fx 0 cx, 0 fy cy, 0 0 1)
@@ -155,7 +160,8 @@ void CameraParameters::resize(cv::Size size) throw(cv::Exception) {
  *
  *
  */
-void CameraParameters::readFromXMLFile(string filePath) throw(cv::Exception) {
+void CameraParameters::readFromXMLFile(string filePath) throw(cv::Exception) 
+{
     cv::FileStorage fs(filePath, cv::FileStorage::READ);
     int w = -1, h = -1;
     cv::Mat MCamera, MDist;
