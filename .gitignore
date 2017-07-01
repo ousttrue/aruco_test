@@ -1,2 +1,4 @@
 build
+build_vs2017
 x64
+Win32
