@@ -41,20 +41,19 @@ or implied, of Rafael Muñoz Salinas.
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include "aruco.h"
-using namespace cv;
-using namespace aruco;
+
 
 string TheInputVideo;
 bool The3DInfoAvailable=false;
 float TheMarkerSize=0.05f;
-MarkerDetector PPDetector;
-VideoCapture TheVideoCapturer;
-vector<Marker> TheMarkers;
-Mat TheInputImage,TheUndInputImage,TheResizedImage;
-CameraParameters TheCameraParams;
-Size TheGlWindowSize;
+aruco::MarkerDetector PPDetector;
+cv::VideoCapture TheVideoCapturer;
+vector<aruco::Marker> TheMarkers;
+cv::Mat TheInputImage,TheUndInputImage,TheResizedImage;
+aruco::CameraParameters TheCameraParams;
+cv::Size TheGlWindowSize;
 bool TheCaptureFlag=true;
-//bool readIntrinsicFile(string TheIntrinsicFile,Mat & TheIntriscCameraMatrix,Mat &TheDistorsionCameraParams,Size size);
+
 
 void vDrawScene();
 void vIdle();
@@ -219,7 +218,7 @@ void vIdle()
         //remove distorion in image
         cv::undistort(TheInputImage,TheUndInputImage, TheCameraParams.CameraMatrix, TheCameraParams.Distorsion);
         //detect markers
-        PPDetector.detect(TheUndInputImage,TheMarkers, TheCameraParams.CameraMatrix,Mat(),TheMarkerSize,false);
+        PPDetector.detect(TheUndInputImage,TheMarkers, TheCameraParams.CameraMatrix, cv::Mat(),TheMarkerSize,false);
         //resize the image to the size of the GL window
         cv::resize(TheUndInputImage,TheResizedImage,TheGlWindowSize);
     }
@@ -235,7 +234,7 @@ void vIdle()
  ************************************/
 void vResize( GLsizei iWidth, GLsizei iHeight )
 {
-    TheGlWindowSize=Size(iWidth,iHeight);
+    TheGlWindowSize=cv::Size(iWidth,iHeight);
     //not all sizes are allowed. OpenCv images have padding at the end of each line in these that are not aligned to 4 bytes
     if (iWidth*3%4!=0) {
         iWidth+=iWidth*3%4;//resize to avoid padding
