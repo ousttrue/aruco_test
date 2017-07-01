@@ -13,7 +13,8 @@ class Renderer
     aruco::MarkerDetector PPDetector;
     cv::VideoCapture TheVideoCapturer;
     std::vector<aruco::Marker> TheMarkers;
-    cv::Mat TheInputImage, TheUndInputImage, TheResizedImage;
+    cv::Mat TheInputImage;
+    cv::Mat TheResizedImage;
     aruco::CameraParameters TheCameraParams;
     cv::Size TheGlWindowSize;
     bool TheCaptureFlag = true;

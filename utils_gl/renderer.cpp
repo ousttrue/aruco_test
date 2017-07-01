@@ -67,28 +67,30 @@ void Renderer::Draw()
 
 void Renderer::Update()
 {
-    if (TheCaptureFlag) {
-        //capture image
-        TheVideoCapturer.grab();
-        TheVideoCapturer.retrieve(TheInputImage);
-        TheUndInputImage.create(TheInputImage.size(), CV_8UC3);
-        //transform color that by default is BGR to RGB because windows systems do not allow reading BGR images with opengl properly
-        cv::cvtColor(TheInputImage, TheInputImage, CV_BGR2RGB);
-        //remove distorion in image
-        cv::undistort(TheInputImage, TheUndInputImage, TheCameraParams.CameraMatrix, TheCameraParams.Distorsion);
-        //detect markers
-        PPDetector.detect(TheUndInputImage, TheMarkers, TheCameraParams.CameraMatrix, cv::Mat(), TheMarkerSize, false);
-        //resize the image to the size of the GL window
-        cv::resize(TheUndInputImage, TheResizedImage, TheGlWindowSize);
+    if (!TheCaptureFlag) {
+        return;
     }
+
+    //capture image
+    TheVideoCapturer.grab();
+    TheVideoCapturer.retrieve(TheInputImage);
+
+    //transform color that by default is BGR to RGB because windows systems do not allow reading BGR images with opengl properly
+    cv::cvtColor(TheInputImage, TheInputImage, CV_BGR2RGB);
+
+    //detect markers
+    PPDetector.detect(TheInputImage, TheMarkers, TheCameraParams.CameraMatrix, cv::Mat(), TheMarkerSize, false);
+
+    //resize the image to the size of the GL window
+    cv::resize(TheInputImage, TheResizedImage, TheGlWindowSize);
 }
 
 void Renderer::Resize(int w, int h)
 {
     TheGlWindowSize = cv::Size(w, h);
     //resize the image to the size of the GL window
-    if (TheUndInputImage.rows != 0)
-        cv::resize(TheUndInputImage, TheResizedImage, TheGlWindowSize);
+    if (TheInputImage.rows != 0)
+        cv::resize(TheInputImage, TheResizedImage, TheGlWindowSize);
 }
 
 void Renderer::DrawCaptureImage()
