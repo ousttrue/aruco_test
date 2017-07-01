@@ -7,5 +7,5 @@ set BUILD_DIR="build_vs2017"
 
 if not exist %BUILD_DIR% mkdir %BUILD_DIR%
 pushd %BUILD_DIR%
-%CMAKE% -D CMAKE_INSTALL_PREFIX=C:/vcpkg/installed/x64-windows -D OpenCVDir=C:/vcpkg/installed/x64-windows/share/opencv .. -G "Visual Studio 15 2017 Win64"
+%CMAKE% -D CMAKE_INSTALL_PREFIX=%VCPKG_DIR%/installed/x64-windows -D OpenCVDir=C:/vcpkg/installed/x64-windows/share/opencv .. -G "Visual Studio 15 2017 Win64"
 popd
