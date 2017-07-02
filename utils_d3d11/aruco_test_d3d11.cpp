@@ -12,6 +12,9 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 
+#define SHADERPATH L"D:/dev/_ar/aruco_sample"
+
+
 int main(int argc,char **argv)
 {
     // initialize capture
@@ -22,7 +25,7 @@ int main(int argc,char **argv)
     }
     cv::Mat TheInputImage;
     if (!capture->GetFrame(TheInputImage)) {
-        return 2;
+        return 6;
     }
 
 	// create window
@@ -107,7 +110,7 @@ int main(int argc,char **argv)
 		// background capture image
 		{
 			auto rect = std::make_shared<dxgiutil::Shader>();
-			if (!rect->Initialize(deviceManager->GetD3D11Device(), L"D:/dev/_ar/aruco_sample/utils_d3d11/rect.hlsl", "VS", "GS", "PS")){
+			if (!rect->Initialize(deviceManager->GetD3D11Device(), SHADERPATH L"/utils_d3d11/rect.hlsl", "VS", "GS", "PS")){
 				return 6;
 			}
 			auto ia = std::make_shared<dxgiutil::InputAssemblerSource>();
@@ -119,10 +122,9 @@ int main(int argc,char **argv)
 			rect->SetTexture("tex0", captureTexture);
 			rect->SetSampler("sample0", sampler);
 		}
-        /*
 		{
 			auto rect = std::make_shared<dxgiutil::Shader>();
-			if (!rect->Initialize(deviceManager->GetD3D11Device(), L"D:/dev/_ar/aruco_sample/utils_d3d11/rect.hlsl", "VS", "GS", "PS")){
+			if (!rect->Initialize(deviceManager->GetD3D11Device(), SHADERPATH L"/utils_d3d11/rect.hlsl", "VS", "GS", "PS")){
 				return 6;
 			}
 			auto ia = std::make_shared<dxgiutil::InputAssemblerSource>();
@@ -134,7 +136,7 @@ int main(int argc,char **argv)
 			rect->SetTexture("tex0", renderTexture);
 			rect->SetSampler("sample0", sampler);
 		}
-        */
+
 		// capture thread
 		bool stop = false;
 		int captureFPS;
@@ -200,12 +202,12 @@ int main(int argc,char **argv)
 						if (!marker){
 							auto device = deviceManager->GetD3D11Device();
 							marker = std::make_shared<dxgiutil::Shader>();
-							if (!marker->Initialize(device, L"D:/dev/_ar/aruco_sample/utils_d3d11/marker.hlsl", "VS", "", "PS")){
-								return;
+							if (!marker->Initialize(device, SHADERPATH L"/utils_d3d11/marker.hlsl", "VS", "", "PS")){
+								//return;
 							}
 							auto ia = std::make_shared<dxgiutil::InputAssemblerSource>();
 							if (!ia->CreateRect(device, detector.GetMarkerSize())){
-								return;
+								//return;
 							}
 							marker->SetIA(ia);
 

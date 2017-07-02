@@ -33,7 +33,7 @@ size_t Detector::Detect(const cv::Mat &input, const cv::Mat &cameraMatrix)
 void Detector::GetModelViewMatrix(size_t index, float modelview_matrix[16])
 {
     double matrix[16];
-    m_pImpl->TheMarkers[index].glGetModelViewMatrix(matrix);
+    m_pImpl->TheMarkers[index].glGetModelViewMatrix(matrix, false);
     for (int i = 0; i < 16; ++i) {
         modelview_matrix[i] = matrix[i];
     }

@@ -87,7 +87,7 @@ class ARUCO_EXPORTS Marker : public std::vector< cv::Point2f > {
     /**Given the extrinsic camera parameters returns the GL_MODELVIEW matrix for opengl.
      * Setting this matrix, the reference coordinate system will be set in this marker
      */
-    void glGetModelViewMatrix(double modelview_matrix[16]) throw(cv::Exception);
+    void glGetModelViewMatrix(double modelview_matrix[16], bool right_handed=true) throw(cv::Exception);
 
     /**
      * Returns position vector and orientation quaternion for an Ogre scene node or entity.

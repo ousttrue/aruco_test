@@ -81,7 +81,7 @@ Marker::Marker(const std::vector< cv::Point2f > &corners, int _id) : std::vector
 /**
  *
 */
-void Marker::glGetModelViewMatrix(double modelview_matrix[16]) throw(cv::Exception) {
+void Marker::glGetModelViewMatrix(double modelview_matrix[16], bool right_handed) throw(cv::Exception) {
     // check if paremeters are valid
     bool invalid = false;
     for (int i = 0; i < 3 && !invalid; i++) {
@@ -116,14 +116,23 @@ void Marker::glGetModelViewMatrix(double modelview_matrix[16]) throw(cv::Excepti
     modelview_matrix[1 + 2 * 4] = para[1][2];
     modelview_matrix[1 + 3 * 4] = para[1][3];
     // R3
-    modelview_matrix[2 + 0 * 4] = -para[2][0];
-    modelview_matrix[2 + 1 * 4] = -para[2][1];
-    modelview_matrix[2 + 2 * 4] = -para[2][2];
-    modelview_matrix[2 + 3 * 4] = -para[2][3];
+    if (right_handed) {
+        modelview_matrix[2 + 0 * 4] = -para[2][0];
+        modelview_matrix[2 + 1 * 4] = -para[2][1];
+        modelview_matrix[2 + 2 * 4] = -para[2][2];
+        modelview_matrix[2 + 3 * 4] = -para[2][3];
+    }
+    else {
+        modelview_matrix[2 + 0 * 4] = para[2][0];
+        modelview_matrix[2 + 1 * 4] = para[2][1];
+        modelview_matrix[2 + 2 * 4] = para[2][2];
+        modelview_matrix[2 + 3 * 4] = para[2][3];
+    }
     modelview_matrix[3 + 0 * 4] = 0.0;
     modelview_matrix[3 + 1 * 4] = 0.0;
     modelview_matrix[3 + 2 * 4] = 0.0;
     modelview_matrix[3 + 3 * 4] = 1.0;
+
     if (scale != 0.0) {
         modelview_matrix[12] *= scale;
         modelview_matrix[13] *= scale;
