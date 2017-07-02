@@ -48,7 +48,7 @@ void ArUcoImpl::GetProjectionMatrix(float proj_matrix[16], const cv::Size &input
             m, 
             0.05, 10,
             m_y_up, m_right_handed);
-    std::copy(m, m+16, proj_matrix);
+    std::transform(m, m + 16, proj_matrix, [](double d){ return static_cast<float>(d); });
 }
 
 void ArUcoImpl::Detect(const cv::Mat &TheInputImage, float markerSize)
@@ -61,7 +61,7 @@ void ArUcoImpl::GetModelViewMatrix(size_t index, float modelview_matrix[16])
 {
     double m[16];
     TheMarkers[index].glGetModelViewMatrix(m);
-    std::copy(m, m+16, modelview_matrix);
+    std::transform(m, m + 16, modelview_matrix, [](double d) { return static_cast<float>(d); });
 
     if(!m_right_handed){
         modelview_matrix[8]*=-1.0f;

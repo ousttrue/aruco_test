@@ -98,7 +98,7 @@ Dictionary Dictionary::loadFromFile(std::string path) throw(cv::Exception){
                 for(auto it=line.rbegin();it!=line.rend() ;it++){
                     marker[idx++]=*it=='1';
                 }
-                d._code_id.insert({marker.to_ullong(),d._code_id.size()});
+                d._code_id.insert({marker.to_ullong(), static_cast<uint16_t>(d._code_id.size())});
         }
     }
     d._tau=computeDictionaryDistance(d);
@@ -350,6 +350,8 @@ std::string Dictionary::getTypeString(DICT_TYPES t)  throw(cv::Exception){
     case CUSTOM:return "CUSTOM";break;
 
    };
+
+    throw std::runtime_error("no such type");
 }
 
 Dictionary::DICT_TYPES Dictionary::getTypeFromString(std::string str)   throw(cv::Exception){
