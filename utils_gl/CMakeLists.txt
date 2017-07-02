@@ -8,8 +8,8 @@ IF(OPENGL_LIBS)
         )
     TARGET_LINK_LIBRARIES(aruco_test_gl ${OPENGL_LIBS})
 
-    ADD_EXECUTABLE(aruco_test_markermap_gl aruco_test_markermap_gl.cpp)
-    TARGET_LINK_LIBRARIES(aruco_test_markermap_gl ${OPENGL_LIBS})
+    #ADD_EXECUTABLE(aruco_test_markermap_gl aruco_test_markermap_gl.cpp)
+    #TARGET_LINK_LIBRARIES(aruco_test_markermap_gl ${OPENGL_LIBS})
 
-    INSTALL(TARGETS aruco_test_gl aruco_test_markermap_gl   RUNTIME DESTINATION bin)
+    #INSTALL(TARGETS aruco_test_gl aruco_test_markermap_gl   RUNTIME DESTINATION bin)
 ENDIF()

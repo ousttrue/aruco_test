@@ -199,12 +199,14 @@ void CameraParameters::readFromXMLFile(std::string filePath) throw(cv::Exception
 /****
  *
  */
-void CameraParameters::glGetProjectionMatrix(cv::Size orgImgSize, cv::Size size, double proj_matrix[16], double gnear, double gfar,
-                                             bool invert) throw(cv::Exception) {
+void CameraParameters::glGetProjectionMatrix(const cv::Mat &CameraMatrix, const cv::Mat &distorsion
+    , cv::Size orgImgSize, cv::Size size, double proj_matrix[16], double gnear, double gfar
+    , bool invert, bool right_handed) throw(cv::Exception)
+{
 
-    if (cv::countNonZero(Distorsion) != 0)
+    if (cv::countNonZero(distorsion) != 0)
         std::cerr << "CameraParameters::glGetProjectionMatrix :: The camera has distortion coefficients " << __FILE__ << " " << __LINE__ << std::endl;
-    if (isValid() == false)
+    if (isValid(CameraMatrix, distorsion, orgImgSize) == false)
         throw cv::Exception(9100, "invalid camera parameters", "CameraParameters::glGetProjectionMatrix", __FILE__, __LINE__);
 
     // Deterime the rsized info
@@ -216,7 +218,7 @@ void CameraParameters::glGetProjectionMatrix(cv::Size orgImgSize, cv::Size size,
     double _cy = CameraMatrix.at< float >(1, 2) * Ay;
     double cparam[3][4] = {{_fx, 0, _cx, 0}, {0, _fy, _cy, 0}, {0, 0, 1, 0}};
 
-    argConvGLcpara2(cparam, size.width, size.height, gnear, gfar, proj_matrix, invert);
+    argConvGLcpara2(cparam, size.width, size.height, gnear, gfar, proj_matrix, invert, right_handed);
 }
 
 /*******************
@@ -237,16 +239,18 @@ double CameraParameters::dot(double a1, double a2, double a3, double b1, double 
  *
  *******************/
 
-void CameraParameters::argConvGLcpara2(double cparam[3][4], int width, int height, double gnear, double gfar, double m[16], bool invert) throw(cv::Exception) {
+void CameraParameters::argConvGLcpara2(double cparam[3][4], int width, int height, double gnear, double gfar, double m[16], bool invert, bool right_handed) throw(cv::Exception) {
 
     double icpara[3][4];
     double trans[3][4];
     double p[3][3], q[4][4];
     int i, j;
 
-    cparam[0][2] *= -1.0;
-    cparam[1][2] *= -1.0;
-    cparam[2][2] *= -1.0;
+    if (right_handed) {
+        cparam[0][2] *= -1.0;
+        cparam[1][2] *= -1.0;
+        cparam[2][2] *= -1.0;
+    }
 
     if (arParamDecompMat(cparam, icpara, trans) < 0)
         throw cv::Exception(9002, "parameter error", "MarkerDetector::argConvGLcpara2", __FILE__, __LINE__);
@@ -363,7 +367,7 @@ int CameraParameters::arParamDecompMat(double source[3][4], double cpara[3][4], 
 void CameraParameters::OgreGetProjectionMatrix(cv::Size orgImgSize, cv::Size size, double proj_matrix[16], double gnear, double gfar,
                                                bool invert) throw(cv::Exception) {
     double temp_matrix[16];
-    (*this).glGetProjectionMatrix(orgImgSize, size, temp_matrix, gnear, gfar, invert);
+    (*this).glGetProjectionMatrix(CameraMatrix, Distorsion, orgImgSize, size, temp_matrix, gnear, gfar, invert);
     proj_matrix[0] = -temp_matrix[0];
     proj_matrix[1] = -temp_matrix[4];
     proj_matrix[2] = -temp_matrix[8];

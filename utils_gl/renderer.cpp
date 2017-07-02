@@ -42,7 +42,7 @@ void Renderer::Draw()
     //like the real camera (without distorsion)
     glMatrixMode(GL_PROJECTION);
     double proj_matrix[16];
-    TheCameraParams.glGetProjectionMatrix(TheInputImage.size(), TheGlWindowSize, proj_matrix, 0.05, 10);
+    TheCameraParams.glGetProjectionMatrix(TheCameraParams.CameraMatrix, TheCameraParams.Distorsion, TheInputImage.size(), TheGlWindowSize, proj_matrix, 0.05, 10);
     //glLoadIdentity();
     glLoadMatrixd(proj_matrix);
 
