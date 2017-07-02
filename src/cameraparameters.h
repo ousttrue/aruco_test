@@ -125,10 +125,11 @@ class ARUCO_EXPORTS CameraParameters {
      */
     static cv::Mat getRTMatrix(const cv::Mat &R_, const cv::Mat &T_, int forceType);
 
+    static void argConvGLcpara2(double cparam[3][4], int width, int height, double gnear, double gfar, double m[16], bool invert, bool right_handed) throw(cv::Exception);
+
   private:
     // GL routines
 
-    static void argConvGLcpara2(double cparam[3][4], int width, int height, double gnear, double gfar, double m[16], bool invert, bool right_handed) throw(cv::Exception);
     static int arParamDecompMat(double source[3][4], double cpara[3][4], double trans[3][4]) throw(cv::Exception);
     static double norm(double a, double b, double c);
     static double dot(double a1, double a2, double a3, double b1, double b2, double b3);
