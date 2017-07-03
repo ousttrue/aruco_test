@@ -3,9 +3,6 @@
 
 #include <ppltasks.h>
 
-using namespace aruco_uwp;
-
-using namespace concurrency;
 using namespace Windows::ApplicationModel;
 using namespace Windows::ApplicationModel::Core;
 using namespace Windows::ApplicationModel::Activation;
@@ -14,6 +11,7 @@ using namespace Windows::UI::Input;
 using namespace Windows::System;
 using namespace Windows::Foundation;
 using namespace Windows::Graphics::Display;
+
 
 // main 関数は、IFrameworkView クラスを初期化する場合にのみ使用します。
 [Platform::MTAThread]
@@ -26,9 +24,10 @@ int main(Platform::Array<Platform::String^>^)
 
 IFrameworkView^ Direct3DApplicationSource::CreateView()
 {
-	return ref new App();
+	return ref new aruco_uwp::App();
 }
 
+namespace aruco_uwp {
 App::App() :
 	m_windowClosed(false),
 	m_windowVisible(true)
@@ -135,7 +134,7 @@ void App::OnSuspending(Platform::Object^ sender, SuspendingEventArgs^ args)
 	// アプリケーションは強制終了されます。
 	SuspendingDeferral^ deferral = args->SuspendingOperation->GetDeferral();
 
-	create_task([this, deferral]()
+	concurrency::create_task([this, deferral]()
 	{
         m_deviceResources->Trim();
 
@@ -193,4 +192,5 @@ void App::OnOrientationChanged(DisplayInformation^ sender, Object^ args)
 void App::OnDisplayContentsInvalidated(DisplayInformation^ sender, Object^ args)
 {
 	m_deviceResources->ValidateDevice();
+}
 }
