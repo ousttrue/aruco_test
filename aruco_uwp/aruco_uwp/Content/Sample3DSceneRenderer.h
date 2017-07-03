@@ -3,9 +3,13 @@
 #include "..\Common\DeviceResources.h"
 #include "ShaderStructures.h"
 #include "..\Common\StepTimer.h"
+#include <ppltasks.h>
+
 
 namespace aruco_uwp
 {
+    ref class Capture;
+
 	// このサンプル レンダリングでは、基本的なレンダリング パイプラインをインスタンス化します。
 	class Sample3DSceneRenderer
 	{
@@ -45,6 +49,7 @@ namespace aruco_uwp
 		bool	m_loadingComplete;
 		float	m_degreesPerSecond;
 		bool	m_tracking;
+
+        Platform::Agile<Capture^> m_capture;
 	};
 }
-
