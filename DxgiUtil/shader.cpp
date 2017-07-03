@@ -340,7 +340,7 @@ namespace dxgiutil {
         return ss.str();
     }
 
-    static DXGI_FORMAT GetDxgiFormat(D3D10_REGISTER_COMPONENT_TYPE type, BYTE mask)
+    static DXGI_FORMAT GetDxgiFormat(D3D_REGISTER_COMPONENT_TYPE type, BYTE mask)
     {
         if ((mask & 0x0F) == 0x0F)
         {
