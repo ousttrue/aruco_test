@@ -64,11 +64,17 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="aruco_uwpMain.cpp" />
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="Content\CaptureRenderer.cpp">
+      <Filter>コンテンツ</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="aruco_uwpMain.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Content\CaptureRenderer.h">
+      <Filter>コンテンツ</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\StoreLogo.png">
