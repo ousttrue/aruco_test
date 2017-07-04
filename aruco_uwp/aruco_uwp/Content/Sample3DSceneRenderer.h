@@ -8,7 +8,7 @@
 
 namespace aruco_uwp
 {
-    ref class CaptureRenderer;
+    class CaptureRenderer;
 
 	// このサンプル レンダリングでは、基本的なレンダリング パイプラインをインスタンス化します。
 	class Sample3DSceneRenderer
@@ -50,6 +50,6 @@ namespace aruco_uwp
 		float	m_degreesPerSecond;
 		bool	m_tracking;
 
-        Platform::Agile<CaptureRenderer^> m_capture;
+        std::shared_ptr<CaptureRenderer> m_capture;
 	};
 }

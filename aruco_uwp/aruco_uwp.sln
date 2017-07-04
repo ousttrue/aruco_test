@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aruco_uwp", "aruco_uwp\aruc
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DxgiUtil", "DxgiUtil\DxgiUtil.vcxproj", "{922D5C4C-572B-49D2-A096-9E88F055859D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aruco", "aruco\aruco.vcxproj", "{6C49578F-15E6-4CCB-9E27-1DC15DE56EA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -47,6 +49,18 @@ Global
 		{922D5C4C-572B-49D2-A096-9E88F055859D}.Release|x64.Build.0 = Release|x64
 		{922D5C4C-572B-49D2-A096-9E88F055859D}.Release|x86.ActiveCfg = Release|Win32
 		{922D5C4C-572B-49D2-A096-9E88F055859D}.Release|x86.Build.0 = Release|Win32
+		{6C49578F-15E6-4CCB-9E27-1DC15DE56EA6}.Debug|ARM.ActiveCfg = Debug|ARM
+		{6C49578F-15E6-4CCB-9E27-1DC15DE56EA6}.Debug|ARM.Build.0 = Debug|ARM
+		{6C49578F-15E6-4CCB-9E27-1DC15DE56EA6}.Debug|x64.ActiveCfg = Debug|x64
+		{6C49578F-15E6-4CCB-9E27-1DC15DE56EA6}.Debug|x64.Build.0 = Debug|x64
+		{6C49578F-15E6-4CCB-9E27-1DC15DE56EA6}.Debug|x86.ActiveCfg = Debug|Win32
+		{6C49578F-15E6-4CCB-9E27-1DC15DE56EA6}.Debug|x86.Build.0 = Debug|Win32
+		{6C49578F-15E6-4CCB-9E27-1DC15DE56EA6}.Release|ARM.ActiveCfg = Release|ARM
+		{6C49578F-15E6-4CCB-9E27-1DC15DE56EA6}.Release|ARM.Build.0 = Release|ARM
+		{6C49578F-15E6-4CCB-9E27-1DC15DE56EA6}.Release|x64.ActiveCfg = Release|x64
+		{6C49578F-15E6-4CCB-9E27-1DC15DE56EA6}.Release|x64.Build.0 = Release|x64
+		{6C49578F-15E6-4CCB-9E27-1DC15DE56EA6}.Release|x86.ActiveCfg = Release|Win32
+		{6C49578F-15E6-4CCB-9E27-1DC15DE56EA6}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

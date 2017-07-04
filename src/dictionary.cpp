@@ -305,7 +305,7 @@ cv::Mat Dictionary::getMarkerImage_id(int id,int bit_size,bool addWaterMark,bool
 
     if (addWaterMark){
             char idcad[30];
-            sprintf(idcad, "#%d", id);
+            sprintf_s(idcad, "#%d", id);
             float ax = float(A) / 100.;
             int linew = 1 + (img.rows / 500);
             cv::putText(img, idcad, cv::Point(0, img.rows - img.rows / 40), cv::FONT_HERSHEY_COMPLEX, ax * 0.15f, cv::Scalar::all(30), linew,CV_AA);

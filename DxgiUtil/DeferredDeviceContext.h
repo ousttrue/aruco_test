@@ -22,7 +22,7 @@ class DeferredDeviceContext
 public:
     DeferredDeviceContext(
             const Microsoft::WRL::ComPtr<ID3D11Device> &device);
-
+    Microsoft::WRL::ComPtr<ID3D11Device> GetDevice()const { return m_device; }
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> GetContext()const{ return m_defferedContext; }
 	void AddPipeline(const std::shared_ptr<Shader> &pipeline);
 	void SetPipeline(size_t index, const std::shared_ptr<Shader> &pipeline){ m_pipelines[index] = pipeline; }

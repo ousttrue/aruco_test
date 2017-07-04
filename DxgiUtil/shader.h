@@ -67,16 +67,20 @@ namespace dxgiutil {
 			, const std::wstring &shaderFile
 			, const std::string &vsFunc, const std::string &gsFunc, const std::string &psFunc
 			);
-		void Draw(
+        bool Initialize(
+            const Microsoft::WRL::ComPtr<ID3D11Device> &pDevice
+            , const void *data, size_t size, const char *fileName
+            , const std::string &vsFunc, const std::string &gsFunc, const std::string &psFunc
+        );
+        void Draw(
 			const Microsoft::WRL::ComPtr<ID3D11DeviceContext> &pDeviceContext);
 		std::wstring Animation();
 
 	private:
 		bool createShaders(
 			const Microsoft::WRL::ComPtr<ID3D11Device> &pDevice
-			, const std::wstring &shaderFile
+			, const void *data, size_t size, const char *fileName
 			, const std::string &vsFunc, const std::string &gsFunc, const std::string &psFunc
 			);
 	};
-
 }

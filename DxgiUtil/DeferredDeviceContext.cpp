@@ -6,6 +6,7 @@ namespace dxgiutil {
 
 DeferredDeviceContext::DeferredDeviceContext(
         const Microsoft::WRL::ComPtr<ID3D11Device> &device)
+    : m_device(device)
 {
     auto hr = device->CreateDeferredContext(0, &m_defferedContext);
 }

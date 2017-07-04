@@ -9,6 +9,7 @@
 #include <windows.h>
 #include <d3d11.h>
 
+
 #ifndef SAFE_DELETE
 #define SAFE_DELETE(p)       { if (p) { delete (p);     (p)=NULL; } }
 #endif
@@ -28,3 +29,5 @@
 /// <param name="ppBlobOut">holds result of compilation</param>
 /// <returns>S_OK for success, or failure code</returns>
 HRESULT CompileShaderFromFile(const WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3D10Blob** ppBlobOut );
+HRESULT CompileShaderFromMemory(const void *data, size_t size, const char* fileName
+    , LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3D10Blob** ppBlobOut);

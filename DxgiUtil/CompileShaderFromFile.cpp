@@ -152,3 +152,54 @@ HRESULT CompileShaderFromFile
     return hr;
 }
 #endif
+
+HRESULT CompileShaderFromMemory(const void *data, size_t size, const char* fileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3D10Blob** ppBlobOut)
+{
+    // リターンコードを初期化.
+    HRESULT hr = S_OK;
+
+    // コンパイルフラグ.
+    DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
+
+#if defined(DEBUG) || defined(_DEBUG)
+    dwShaderFlags |= D3DCOMPILE_DEBUG;
+#endif//defiend(DEBUG) || defined(_DEBUG)
+
+#if defined(NDEBUG) || defined(_NDEBUG)
+    dwShaderFlags |= D3DCOMPILE_OPTIMIZATION_LEVEL3;
+#endif//defined(NDEBUG) || defined(_NDEBUG)
+
+    ID3DBlob* pErrorBlob = NULL;
+
+    // ファイルからシェーダをコンパイル.
+    hr = D3DCompile(data, size, fileName,
+        NULL,
+        D3D_COMPILE_STANDARD_FILE_INCLUDE,
+        szEntryPoint,
+        szShaderModel,
+        dwShaderFlags,
+        0,
+        ppBlobOut,
+        &pErrorBlob
+    );
+
+    // エラーチェック.
+    if (FAILED(hr))
+    {
+        // エラーメッセージを出力.
+        if (pErrorBlob != NULL)
+        {
+            OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
+        }
+    }
+
+    // 解放処理.
+    if (pErrorBlob)
+    {
+        pErrorBlob->Release();
+        pErrorBlob = NULL;
+    }
+
+    // リターンコードを返却.
+    return hr;
+}

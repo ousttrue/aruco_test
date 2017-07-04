@@ -67,12 +67,18 @@
     <ClCompile Include="Content\CaptureRenderer.cpp">
       <Filter>コンテンツ</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\utils_d3d11\detector.cpp">
+      <Filter>コンテンツ</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="aruco_uwpMain.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Content\CaptureRenderer.h">
+      <Filter>コンテンツ</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\utils_d3d11\detector.h">
       <Filter>コンテンツ</Filter>
     </ClInclude>
   </ItemGroup>
@@ -89,5 +95,30 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="aruco_uwp_TemporaryKey.pfx" />
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_photo320d.dll" />
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_shape320d.dll" />
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_stitching320d.dll" />
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_video320d.dll" />
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_videoio320d.dll" />
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_videostab320d.dll" />
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_calib3d320d.dll" />
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_core320d.dll" />
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_features2d320d.dll" />
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_flann320d.dll" />
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_highgui320d.dll" />
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_imgcodecs320d.dll" />
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_imgproc320d.dll" />
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_ml320d.dll" />
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_objdetect320d.dll" />
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\libpng16d.dll" />
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\tiffd.dll" />
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\tiffxxd.dll" />
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\turbojpeg.dll" />
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\zlibd1.dll" />
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\jpeg62.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="marker.hlsl.txt" />
+    <Text Include="rect.hlsl.txt" />
   </ItemGroup>
 </Project>

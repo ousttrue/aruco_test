@@ -161,6 +161,7 @@ Microsoft::WRL::ComPtr<ID3D11SamplerState> DeviceManager::CreateSampler()
 	return sampler;
 }
 
+#ifndef UWP
 std::shared_ptr<Swapchain> DeviceManager::CreateSwapchain(HWND hWnd)
 {
 	auto adapter = GetDxgiAdapter();
@@ -184,6 +185,7 @@ std::shared_ptr<Swapchain> DeviceManager::CreateSwapchain(
 
     return swapchain;
 }
+#endif
 
 std::shared_ptr<Texture> DeviceManager::CreateTexture(int w, int h, int pixelBytes)
 {

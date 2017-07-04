@@ -133,16 +133,17 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Link>
-      <AdditionalDependencies>d2d1.lib; d3d11.lib; dxgi.lib; windowscodecs.lib; dwrite.lib; %(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d2d1.lib;d3d11.lib;dxgi.lib;windowscodecs.lib;dwrite.lib;d3dcompiler.lib;strmiids.lib;dxguid.lib;$(VCPKG_DIR)\installed\x86-uwp\debug\lib\opencv_shape320d.lib;$(VCPKG_DIR)\installed\x86-uwp\debug\lib\opencv_stitching320d.lib;$(VCPKG_DIR)\installed\x86-uwp\debug\lib\opencv_objdetect320d.lib;$(VCPKG_DIR)\installed\x86-uwp\debug\lib\opencv_videostab320d.lib;$(VCPKG_DIR)\installed\x86-uwp\debug\lib\opencv_calib3d320d.lib;$(VCPKG_DIR)\installed\x86-uwp\debug\lib\opencv_features2d320d.lib;$(VCPKG_DIR)\installed\x86-uwp\debug\lib\opencv_flann320d.lib;$(VCPKG_DIR)\installed\x86-uwp\debug\lib\opencv_highgui320d.lib;$(VCPKG_DIR)\installed\x86-uwp\debug\lib\opencv_ml320d.lib;$(VCPKG_DIR)\installed\x86-uwp\debug\lib\opencv_photo320d.lib;$(VCPKG_DIR)\installed\x86-uwp\debug\lib\opencv_video320d.lib;$(VCPKG_DIR)\installed\x86-uwp\debug\lib\opencv_videoio320d.lib;$(VCPKG_DIR)\installed\x86-uwp\debug\lib\opencv_imgcodecs320d.lib;$(VCPKG_DIR)\installed\x86-uwp\debug\lib\opencv_imgproc320d.lib;$(VCPKG_DIR)\installed\x86-uwp\debug\lib\opencv_core320d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories); $(VCInstallDir)\lib\store; $(VCInstallDir)\lib</AdditionalLibraryDirectories>
     </Link>
     <ClCompile>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(IntermediateOutputPath);$(VCPKG_DIR)\installed\x86-uwp\include;..\..\src;..\..\utils_d3d11;..\..\DxgiUtil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
-      <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4453;4819;4290;</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_DEBUG;UWP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -197,6 +198,7 @@
     <Image Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\utils_d3d11\detector.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="Common\DeviceResources.h" />
     <ClInclude Include="aruco_uwpMain.h" />
@@ -209,6 +211,7 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\utils_d3d11\detector.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Common\DeviceResources.cpp" />
     <ClCompile Include="aruco_uwpMain.cpp" />
@@ -228,6 +231,69 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\jpeg62.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\libpng16d.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_calib3d320d.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_core320d.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_features2d320d.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_flann320d.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_highgui320d.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_imgcodecs320d.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_imgproc320d.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_ml320d.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_objdetect320d.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_photo320d.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_shape320d.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_stitching320d.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_video320d.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_videoio320d.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\opencv_videostab320d.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\tiffd.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\tiffxxd.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\turbojpeg.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="..\..\..\..\..\vcpkg\installed\x86-uwp\debug\bin\zlibd1.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="aruco_uwp_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -239,9 +305,16 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\aruco\aruco.vcxproj">
+      <Project>{6c49578f-15e6-4ccb-9e27-1dc15de56ea6}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\DxgiUtil\DxgiUtil.vcxproj">
       <Project>{922d5c4c-572b-49d2-a096-9e88f055859d}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="marker.hlsl.txt" />
+    <Text Include="rect.hlsl.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -16,11 +16,11 @@ class DeviceManager
 {
     Microsoft::WRL::ComPtr<ID3D11Device> m_pDevice;
 
-	DeviceManager(const Microsoft::WRL::ComPtr<ID3D11Device> &pDevice);
 	DeviceManager(const DeviceManager &);
 	DeviceManager& operator=(const DeviceManager &);
 public:
-	static std::shared_ptr<DeviceManager> Create();
+    DeviceManager(const Microsoft::WRL::ComPtr<ID3D11Device> &pDevice);
+    static std::shared_ptr<DeviceManager> Create();
 	static std::shared_ptr<DeviceManager> Create(int adapterIndex);
 	static std::shared_ptr<DeviceManager> Create(
             const Microsoft::WRL::ComPtr<IDXGIAdapter> &adapter);
@@ -34,9 +34,11 @@ public:
 
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> CreateSampler();
 
+#ifndef UWP
 	std::shared_ptr<Swapchain> CreateSwapchain(HWND hWnd);
 	std::shared_ptr<Swapchain> CreateSwapchain(
             const Microsoft::WRL::ComPtr<IDXGIOutput> &output, HWND hWnd);
+#endif
 
     std::shared_ptr<Texture> CreateTexture(int w, int h, int pixelBytes);
 

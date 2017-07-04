@@ -26,31 +26,10 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\DxgiUtil\CompileShaderFromFile.cpp" />
-    <ClCompile Include="..\..\DxgiUtil\constantbuffer.cpp" />
-    <ClCompile Include="..\..\DxgiUtil\DeferredDeviceContext.cpp" />
-    <ClCompile Include="..\..\DxgiUtil\DeviceManager.cpp" />
-    <ClCompile Include="..\..\DxgiUtil\imageutil.cpp" />
-    <ClCompile Include="..\..\DxgiUtil\shader.cpp" />
-    <ClCompile Include="..\..\DxgiUtil\Texture.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\DxgiUtil\CompileShaderFromFile.h" />
-    <ClInclude Include="..\..\DxgiUtil\constantbuffer.h" />
-    <ClInclude Include="..\..\DxgiUtil\debugprint.h" />
-    <ClInclude Include="..\..\DxgiUtil\DeferredDeviceContext.h" />
-    <ClInclude Include="..\..\DxgiUtil\DeviceManager.h" />
-    <ClInclude Include="..\..\DxgiUtil\imageutil.h" />
-    <ClInclude Include="..\..\DxgiUtil\libdxgiutil.h" />
-    <ClInclude Include="..\..\DxgiUtil\shader.h" />
-    <ClInclude Include="..\..\DxgiUtil\Texture.h" />
-    <ClInclude Include="..\..\DxgiUtil\ThreadName.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{922d5c4c-572b-49d2-a096-9e88f055859d}</ProjectGuid>
+    <ProjectGuid>{6c49578f-15e6-4ccb-9e27-1dc15de56ea6}</ProjectGuid>
     <Keyword>StaticLibrary</Keyword>
-    <RootNamespace>DxgiUtil</RootNamespace>
+    <RootNamespace>aruco</RootNamespace>
     <DefaultLanguage>ja-JP</DefaultLanguage>
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <AppContainerApplication>true</AppContainerApplication>
@@ -141,7 +120,8 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;UWP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(VCPKG_DIR)\installed\x86-uwp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4819;4290;4244;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -209,6 +189,39 @@
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\aruco.h" />
+    <ClInclude Include="..\..\src\ar_omp.h" />
+    <ClInclude Include="..\..\src\cameraparameters.h" />
+    <ClInclude Include="..\..\src\checkrectcontour.h" />
+    <ClInclude Include="..\..\src\cvdrawingutils.h" />
+    <ClInclude Include="..\..\src\dictionary.h" />
+    <ClInclude Include="..\..\src\exports.h" />
+    <ClInclude Include="..\..\src\ippe.h" />
+    <ClInclude Include="..\..\src\levmarq.h" />
+    <ClInclude Include="..\..\src\marker.h" />
+    <ClInclude Include="..\..\src\markerdetector.h" />
+    <ClInclude Include="..\..\src\markerlabeler.h" />
+    <ClInclude Include="..\..\src\markerlabelers\dictionary_based.h" />
+    <ClInclude Include="..\..\src\markerlabelers\svmmarkers.h" />
+    <ClInclude Include="..\..\src\markermap.h" />
+    <ClInclude Include="..\..\src\posetracker.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\ar_omp.cpp" />
+    <ClCompile Include="..\..\src\cameraparameters.cpp" />
+    <ClCompile Include="..\..\src\checkrectcontour.cpp" />
+    <ClCompile Include="..\..\src\cvdrawingutils.cpp" />
+    <ClCompile Include="..\..\src\dictionary.cpp" />
+    <ClCompile Include="..\..\src\ippe.cpp" />
+    <ClCompile Include="..\..\src\marker.cpp" />
+    <ClCompile Include="..\..\src\markerdetector.cpp" />
+    <ClCompile Include="..\..\src\markerlabeler.cpp" />
+    <ClCompile Include="..\..\src\markerlabelers\dictionary_based.cpp" />
+    <ClCompile Include="..\..\src\markerlabelers\svmmarkers.cpp" />
+    <ClCompile Include="..\..\src\markermap.cpp" />
+    <ClCompile Include="..\..\src\posetracker.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

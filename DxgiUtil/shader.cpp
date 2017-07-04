@@ -204,7 +204,51 @@ namespace dxgiutil {
         , const std::string &vsFunc, const std::string &gsFunc, const std::string &psFunc
     )
     {
+        return false;
+#if 0
         if (!createShaders(pDevice, shaderFile, vsFunc, gsFunc, psFunc)) {
+            return false;
+        }
+
+        /*
+        auto wicFactory = std::make_shared<imageutil::Factory>();
+        auto image=wicFactory->Load(textureFile);
+        if(image){
+        if (!m_texture->Initialize(pDevice, image)){
+        return false;
+        }
+        }
+        */
+
+        // BLEND
+        D3D11_RENDER_TARGET_BLEND_DESC blend;
+        blend.BlendEnable = TRUE;
+        blend.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+        blend.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+        blend.BlendOp = D3D11_BLEND_OP_ADD;
+        blend.SrcBlendAlpha = D3D11_BLEND_ONE;
+        blend.DestBlendAlpha = D3D11_BLEND_ZERO;
+        blend.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+        blend.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+        D3D11_BLEND_DESC blendDesc = { 0 };
+        blendDesc.RenderTarget[0] = blend;
+
+        auto hr = pDevice->CreateBlendState(&blendDesc, &m_blendState);
+        if (FAILED(hr)) {
+            return false;
+        }
+
+        return true;
+#endif
+    }
+
+    bool Shader::Initialize(const Microsoft::WRL::ComPtr<ID3D11Device> &pDevice
+        , const void *data, size_t size, const char *fileName
+        , const std::string &vsFunc, const std::string &gsFunc, const std::string &psFunc
+    )
+    {
+        if (!createShaders(pDevice, data, size, fileName, vsFunc, gsFunc, psFunc)) {
             return false;
         }
 
@@ -386,13 +430,13 @@ namespace dxgiutil {
     }
 
     bool Shader::createShaders(const Microsoft::WRL::ComPtr<ID3D11Device> &pDevice
-        , const std::wstring &shaderFile
+        , const void *data, size_t size, const char *fileName
         , const std::string &vsFunc, const std::string &gsFunc, const std::string &psFunc)
     {
         // vertex shader
         {
             Microsoft::WRL::ComPtr<ID3DBlob> vblob;
-            HRESULT hr = CompileShaderFromFile(shaderFile.c_str(), vsFunc.c_str(), "vs_4_0", &vblob);
+            HRESULT hr = CompileShaderFromMemory(data, size, fileName, vsFunc.c_str(), "vs_4_0", &vblob);
             if (FAILED(hr))
                 return false;
             hr = pDevice->CreateVertexShader(vblob->GetBufferPointer(), vblob->GetBufferSize(), NULL, &m_pVsh);
@@ -442,7 +486,7 @@ namespace dxgiutil {
         // geometry shader
         if (!gsFunc.empty()) {
             Microsoft::WRL::ComPtr<ID3DBlob> blob;
-            auto hr = CompileShaderFromFile(shaderFile.c_str(), gsFunc.c_str(), "gs_4_0", &blob);
+            auto hr = CompileShaderFromMemory(data, size, fileName, gsFunc.c_str(), "gs_4_0", &blob);
             if (FAILED(hr)) {
                 return false;
             }
@@ -472,7 +516,7 @@ namespace dxgiutil {
         // pixel shader
         {
             Microsoft::WRL::ComPtr<ID3DBlob> pblob;
-            auto hr = CompileShaderFromFile(shaderFile.c_str(), psFunc.c_str(), "ps_4_0", &pblob);
+            auto hr = CompileShaderFromMemory(data, size, fileName, psFunc.c_str(), "ps_4_0", &pblob);
             if (FAILED(hr))
                 return false;
             hr = pDevice->CreatePixelShader(pblob->GetBufferPointer(), pblob->GetBufferSize(), NULL, &m_pPsh);
