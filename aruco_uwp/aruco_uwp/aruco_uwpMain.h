@@ -1,9 +1,11 @@
 ﻿#pragma once
 
-#include "Common\StepTimer.h"
-#include "Common\DeviceResources.h"
-#include "Content\Sample3DSceneRenderer.h"
-#include "Content\SampleFpsTextRenderer.h"
+#include "Common/StepTimer.h"
+#include "Common/DeviceResources.h"
+#include "Content/Sample3DSceneRenderer.h"
+#include "Content/SampleFpsTextRenderer.h"
+#include "Content/CaptureRenderer.h"
+
 
 // Direct2D および 3D コンテンツを画面上でレンダリングします。
 namespace aruco_uwp
@@ -28,6 +30,8 @@ namespace aruco_uwp
 		// TODO: これを独自のコンテンツ レンダラーで置き換えます。
 		std::unique_ptr<Sample3DSceneRenderer> m_sceneRenderer;
 		std::unique_ptr<SampleFpsTextRenderer> m_fpsTextRenderer;
+
+        std::unique_ptr<CaptureRenderer> m_captureRenderer;
 
 		// ループ タイマーをレンダリングしています。
 		DX::StepTimer m_timer;

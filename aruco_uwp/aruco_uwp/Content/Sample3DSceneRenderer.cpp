@@ -18,8 +18,7 @@ Sample3DSceneRenderer::Sample3DSceneRenderer(const std::shared_ptr<DX::DeviceRes
 	m_degreesPerSecond(45),
 	m_indexCount(0),
 	m_tracking(false),
-	m_deviceResources(deviceResources),
-    m_capture(new CaptureRenderer())
+	m_deviceResources(deviceResources)
 {
 	CreateDeviceDependentResources();
 	CreateWindowSizeDependentResources();
@@ -29,8 +28,6 @@ Sample3DSceneRenderer::Sample3DSceneRenderer(const std::shared_ptr<DX::DeviceRes
 void Sample3DSceneRenderer::CreateWindowSizeDependentResources()
 {
 	Size outputSize = m_deviceResources->GetOutputSize();
-
-    m_capture->Resize(outputSize.Width, outputSize.Height);
 
 	float aspectRatio = outputSize.Width / outputSize.Height;
 	float fovAngleY = 70.0f * DirectX::XM_PI / 180.0f;
@@ -190,11 +187,6 @@ void Sample3DSceneRenderer::Render()
 
 void Sample3DSceneRenderer::CreateDeviceDependentResources()
 {
-    auto device=m_deviceResources->GetD3DDevice();
-    auto deviceManager = std::make_shared<dxgiutil::DeviceManager>(device);
-    auto deferredRenderer = std::make_shared<dxgiutil::DeferredDeviceContext>(device);
-    m_capture->InitializeCaptureAsync(deviceManager, deferredRenderer);
-
 	// シェーダーを非同期で読み込みます。
 	auto loadVSTask = DX::ReadDataAsync(L"SampleVertexShader.cso");
 	auto loadPSTask = DX::ReadDataAsync(L"SamplePixelShader.cso");

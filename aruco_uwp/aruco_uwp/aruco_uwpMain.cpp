@@ -19,6 +19,8 @@ aruco_uwpMain::aruco_uwpMain(const std::shared_ptr<DX::DeviceResources>& deviceR
 
 	m_fpsTextRenderer = std::unique_ptr<SampleFpsTextRenderer>(new SampleFpsTextRenderer(m_deviceResources));
 
+    m_captureRenderer = std::unique_ptr<CaptureRenderer>(new CaptureRenderer(m_deviceResources));
+
 	// TODO: 既定の可変タイムステップ モード以外のモードが必要な場合は、タイマー設定を変更してください。
 	// 例: 60 FPS 固定タイムステップ更新ロジックでは、次を呼び出します:
 	/*
@@ -38,6 +40,7 @@ void aruco_uwpMain::CreateWindowSizeDependentResources()
 {
 	// TODO: これをアプリのコンテンツのサイズに依存する初期化で置き換えます。
 	m_sceneRenderer->CreateWindowSizeDependentResources();
+    m_captureRenderer->CreateWindowSizeDependentResources();
 }
 
 // アプリケーション状態をフレームごとに 1 回更新します。
@@ -48,6 +51,7 @@ void aruco_uwpMain::Update()
 	{
 		// TODO: これをアプリのコンテンツの更新関数で置き換えます。
 		m_sceneRenderer->Update(m_timer);
+        m_captureRenderer->Update(m_timer);
 		m_fpsTextRenderer->Update(m_timer);
 	});
 }
@@ -79,6 +83,7 @@ bool aruco_uwpMain::Render()
 	// シーン オブジェクトをレンダリングします。
 	// TODO: これをアプリのコンテンツのレンダリング関数で置き換えます。
 	m_sceneRenderer->Render();
+    m_captureRenderer->Render();
 	m_fpsTextRenderer->Render();
 
 	return true;
@@ -88,6 +93,7 @@ bool aruco_uwpMain::Render()
 void aruco_uwpMain::OnDeviceLost()
 {
 	m_sceneRenderer->ReleaseDeviceDependentResources();
+    m_captureRenderer->ReleaseDeviceDependentResources();
 	m_fpsTextRenderer->ReleaseDeviceDependentResources();
 }
 
@@ -95,6 +101,7 @@ void aruco_uwpMain::OnDeviceLost()
 void aruco_uwpMain::OnDeviceRestored()
 {
 	m_sceneRenderer->CreateDeviceDependentResources();
-	m_fpsTextRenderer->CreateDeviceDependentResources();
+    m_captureRenderer->CreateDeviceDependentResources();
+    m_fpsTextRenderer->CreateDeviceDependentResources();
 	CreateWindowSizeDependentResources();
 }

@@ -193,13 +193,122 @@ public:
 
 namespace aruco_uwp
 {
-    void CaptureRenderer::InitializeCaptureAsync(const std::shared_ptr<dxgiutil::DeviceManager> &deviceManager
-        , const std::shared_ptr<dxgiutil::DeferredDeviceContext> &deferredRenderer)
+    CaptureRenderer::CaptureRenderer(const std::shared_ptr<DX::DeviceResources>& deviceResources)
+        : m_deviceResources(deviceResources)
     {
-        m_deviceManager = deviceManager;
+        for (int i = 0; i < 4; ++i) {
+            auto marker = std::make_shared<dxgiutil::Shader>();
+            m_markerShaders.push_back(marker);
+        }
 
-        auto device = deferredRenderer->GetDevice();
-        m_deferredRenderer = deferredRenderer;
+        CreateDeviceDependentResources();
+        CreateWindowSizeDependentResources();
+
+        // setup capture
+        m_detector = std::make_shared<Detector>();
+
+        GetVideoDeviceAsync()
+            .then([this](Windows::Devices::Enumeration::DeviceInformation^ device) {
+
+            return CreateMediaCaptureAsync(device);
+        })
+            .then([this](Platform::Agile<Windows::Media::Capture::MediaCapture^> capture) {
+
+            m_capture = capture;
+            return StartCaptureAsync();
+
+        });
+        ;
+    }
+
+    void CaptureRenderer::CreateWindowSizeDependentResources()
+    {
+        auto outputSize = m_deviceResources->GetOutputSize();
+        m_width = outputSize.Width;
+        m_height = outputSize.Height;
+
+
+        // background capture image
+        auto captureRectTask = DX::ReadDataAsync(L"rect.hlsl.txt")
+            .then([this](const std::vector<unsigned char> &bytes) {
+
+            auto rect = std::make_shared<dxgiutil::Shader>();
+            if (!rect->Initialize(m_deviceManager->GetD3D11Device()
+                , bytes.data(), bytes.size(), "rect", "VS", "GS", "PS")) {
+                throw Platform::Exception::CreateException(E_FAIL);
+            }
+            auto ia = std::make_shared<dxgiutil::InputAssemblerSource>();
+            if (!ia->CreateRectForGS(m_deviceManager->GetD3D11Device())) {
+                throw Platform::Exception::CreateException(E_FAIL);
+            }
+            rect->SetIA(ia);
+            m_deferredRenderer->AddPipeline(rect);
+            m_captureTexture = m_deviceManager->CreateTexture(m_width, m_height, 4);
+            rect->SetTexture("tex0", m_captureTexture);
+            auto sampler = m_deviceManager->CreateSampler();
+            rect->SetSampler("sample0", sampler);
+        });
+
+        auto renderRectTask = DX::ReadDataAsync(L"rect.hlsl.txt")
+            .then([this](const std::vector<unsigned char> &bytes) {
+
+            auto rect = std::make_shared<dxgiutil::Shader>();
+            if (!rect->Initialize(m_deviceManager->GetD3D11Device()
+                , bytes.data(), bytes.size(), "rect", "VS", "GS", "PS")) {
+                throw Platform::Exception::CreateException(E_FAIL);
+            }
+            auto ia = std::make_shared<dxgiutil::InputAssemblerSource>();
+            if (!ia->CreateRectForGS(m_deviceManager->GetD3D11Device())) {
+                throw Platform::Exception::CreateException(E_FAIL);
+            }
+            rect->SetIA(ia);
+            m_deferredRenderer->AddPipeline(rect);
+            m_renderTexture = m_deviceManager->CreateTexture(m_width, m_height, 4);
+            rect->SetTexture("tex0", m_renderTexture);
+            auto sampler = m_deviceManager->CreateSampler();
+            rect->SetSampler("sample0", sampler);
+        });
+
+        std::vector<concurrency::task<void>> tasks;
+        for (int i = 0; i < m_markerShaders.size(); ++i)
+        {
+            auto markerTask = DX::ReadDataAsync(L"marker.hlsl.txt")
+                .then([this, i](const std::vector<unsigned char> &bytes) {
+
+                auto marker = m_markerShaders[i];
+                if (!marker->Initialize(m_deviceManager->GetD3D11Device(),
+                    bytes.data(), bytes.size(), "marker", "VS", "", "PS")) {
+                    throw Platform::Exception::CreateException(E_FAIL);
+                }
+                auto ia = std::make_shared<dxgiutil::InputAssemblerSource>();
+                if (!ia->CreateRect(m_deviceManager->GetD3D11Device(), m_detector->GetMarkerSize())) {
+                    throw Platform::Exception::CreateException(E_FAIL);
+                }
+                marker->SetIA(ia);
+            });
+            tasks.push_back(markerTask);
+        }
+
+        (captureRectTask && renderRectTask
+            && tasks[0]
+            && tasks[1]
+            && tasks[2]
+            && tasks[3]
+            ).then([this]() {
+
+            m_loadingComplete = true;
+
+        });
+    }
+
+    void CaptureRenderer::CreateDeviceDependentResources()
+    {
+        auto device = m_deviceResources->GetD3DDevice();
+        m_deviceManager = std::make_shared<dxgiutil::DeviceManager>(device);
+
+        m_deferredRenderer = std::make_shared<dxgiutil::DeferredDeviceContext>(
+            device);
+
         m_deferredCapture = std::make_shared<dxgiutil::DeferredDeviceContext>(
             device);
         m_deferredRenderer->AddSubcontext(m_deferredCapture);
@@ -207,24 +316,38 @@ namespace aruco_uwp
         m_deferredMarker = std::make_shared<dxgiutil::DeferredDeviceContext>(
             device);
         m_deferredRenderer->AddSubcontext(m_deferredMarker);
+    }
 
+    void CaptureRenderer::ReleaseDeviceDependentResources()
+    {
+        m_loadingComplete = false;
+        for (auto marker : m_markerShaders) {
 
-        //
-        m_detector = std::make_shared<Detector>();
+            //marker->Finalize();
 
-        GetVideoDeviceAsync()
-            .then([this](Windows::Devices::Enumeration::DeviceInformation^ device) {
+        }
+        m_captureTexture.reset();
+        m_renderTexture.reset();
+        m_deferredMarker.reset();
+        m_deferredCapture.reset();
+        m_deferredRenderer.reset();
+        m_deviceManager.reset();
+    }
 
-            CreateMediaCaptureAsync(device)
-                .then([this](Platform::Agile<Windows::Media::Capture::MediaCapture^> capture) {
+    void CaptureRenderer::Update(DX::StepTimer const& timer)
+    {
 
-                m_capture = capture;
-                StartCaptureAsync();
+    }
 
-            });
+    void CaptureRenderer::Render()
+    {
+        if (!m_loadingComplete)return;
 
-        });
-        ;
+        auto rtv = m_deviceResources->GetBackBufferRenderTargetView();
+        m_deferredRenderer->RenderPipelines(rtv, m_width, m_height);
+        {
+            m_deferredRenderer->ExecuteCommandList(m_deviceResources->GetD3DDeviceContext());
+        }
     }
 
     concurrency::task<void> CaptureRenderer::StartCaptureAsync()
@@ -288,65 +411,14 @@ namespace aruco_uwp
 
     void CaptureRenderer::OnFrame(const cv::Mat &TheInputImage)
     {
-        if (!m_captureTexture || !m_renderTexture || m_loading)
-        {
-            if (m_loading)return;
-            m_loading = true;
-
-            m_captureTexture = m_deviceManager->CreateTexture(TheInputImage.size().width, TheInputImage.size().height
-                , 4);
-            m_renderTexture = m_deviceManager->CreateTexture(TheInputImage.size().width, TheInputImage.size().height
-                , 4);
-
-
-            // background capture image
-            auto loadRectTask = DX::ReadDataAsync(L"rect.hlsl.txt")
-                .then([this](const std::vector<uchar> &bytes) {
-
-                auto rect = std::make_shared<dxgiutil::Shader>();
-                if (!rect->Initialize(m_deviceManager->GetD3D11Device(), bytes.data(), bytes.size(), "rect", "VS", "GS", "PS")) {
-                    //return 6;
-                }
-                auto ia = std::make_shared<dxgiutil::InputAssemblerSource>();
-                if (!ia->CreateRectForGS(m_deviceManager->GetD3D11Device())) {
-                    //return 7;
-                }
-                rect->SetIA(ia);
-                m_deferredRenderer->AddPipeline(rect);
-                rect->SetTexture("tex0", m_captureTexture);
-                auto sampler = m_deviceManager->CreateSampler();
-                rect->SetSampler("sample0", sampler);
-
-                return DX::ReadDataAsync(L"rect.hlsl.txt");
-            })
-                .then([this](const std::vector<uchar> &bytes) {
-
-                auto rect = std::make_shared<dxgiutil::Shader>();
-                if (!rect->Initialize(m_deviceManager->GetD3D11Device()
-                    , bytes.data(), bytes.size(), "rect", "VS", "GS", "PS")) {
-                    return 6;
-                }
-                auto ia = std::make_shared<dxgiutil::InputAssemblerSource>();
-                if (!ia->CreateRectForGS(m_deviceManager->GetD3D11Device())) {
-                    return 7;
-                }
-                rect->SetIA(ia);
-                m_deferredRenderer->AddPipeline(rect);
-                rect->SetTexture("tex0", m_renderTexture);
-                auto sampler = m_deviceManager->CreateSampler();
-                rect->SetSampler("sample0", sampler);
-
-                m_loading = false;
-
-            });
-
+        if (!m_loadingComplete) {
             return;
         }
 
         {
-            std::lock_guard<std::mutex> scoped(m_workMutex);
-            if (m_working)return;
-            m_working = true;
+            std::lock_guard<std::mutex> scoped(m_captureMutex);
+            if (m_captureTaskWorking)return;
+            m_captureTaskWorking = true;
         }
 
         cv::Mat TheResizedImage;
@@ -392,28 +464,17 @@ namespace aruco_uwp
         try {
             // Model
             auto markers = m_detector->Detect(grey, intrinsics);
+            if (markers > m_markerShaders.size()) {
+                markers = m_markerShaders.size();
+            }
+
             m_deferredMarker->ResizePipelines(markers);
             for (size_t i = 0; i < markers; ++i) {
                 float modelview_matrix[16];
                 m_detector->GetModelViewMatrix(i, modelview_matrix);
+                auto marker = m_markerShaders[i];
+                m_deferredMarker->SetPipeline(i, marker);
 
-                auto marker = m_deferredMarker->GetPipeline(i);
-                if (!marker) {
-                    auto device = m_deviceManager->GetD3D11Device();
-                    marker = std::make_shared<dxgiutil::Shader>();
-                    /*
-                    if (!marker->Initialize(device, SHADERPATH L"/utils_d3d11/marker.hlsl", "VS", "", "PS")) {
-                        //return;
-                    }
-                    */
-                    auto ia = std::make_shared<dxgiutil::InputAssemblerSource>();
-                    if (!ia->CreateRect(device, m_detector->GetMarkerSize())) {
-                        //return;
-                    }
-                    marker->SetIA(ia);
-
-                    m_deferredMarker->SetPipeline(i, marker);
-                }
                 marker->SetCB("ModelMatrix", *((const DirectX::XMFLOAT4X4*)modelview_matrix));
                 marker->SetCB("ViewMatrix", viewMatrix);
                 marker->SetCB("ProjectionMatrix", projMatrix);
@@ -433,8 +494,8 @@ namespace aruco_uwp
             , The32bit.data, The32bit.step*The32bit.rows, The32bit.step);
 
         {
-            std::lock_guard<std::mutex> scoped(m_workMutex);
-            m_working = false;
+            std::lock_guard<std::mutex> scoped(m_captureMutex);
+            m_captureTaskWorking = false;
         }
     }
 }
